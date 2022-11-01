@@ -31,5 +31,8 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Add stash
+        run: git add . && git commit -m "new version"
+
       - name: Publish
         run: yarn publish:patch
