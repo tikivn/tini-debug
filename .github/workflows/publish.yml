@@ -3,7 +3,7 @@ name: Publish version
 on:
   push:
     branches:
-      - fix/ci
+      - master
 
 jobs:
   publish:
