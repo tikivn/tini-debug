@@ -1,6 +1,6 @@
 {
   "name": "@tiki.vn/tini-debug",
-  "version": "0.0.2",
+  "version": "0.0.0",
   "description": "Debug tool for TiniApp",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -16,6 +16,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tikivn/tini-debug.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "author": "",
   "license": "ISC",
