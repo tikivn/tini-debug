@@ -14,9 +14,9 @@ export type Log = {
 };
 
 export type LoggerConfig = {
-  whitelist: string[];
-  isSendToSlack: boolean;
-  slackUrl: string;
+  whitelist?: string[];
+  isSendToSlack?: boolean;
+  slackUrl?: string;
   appName: string;
 };
 
@@ -48,8 +48,8 @@ class Logger {
   trackingLog: Log[] = [];
   trackingRequest: Request[] = [];
 
-  getDebug = () => {
-    const _getConfig = this.getConfig.bind(this);
+  #getDebug = () => {
+    const _getConfig = this.#getConfig.bind(this);
     return {
       log(...args: Parameters<typeof console.log>) {
         addLog(args, LEVEL_DEBUG.INFO, _getConfig());
@@ -63,7 +63,7 @@ class Logger {
     };
   };
 
-  getRequest = (options: my.IHttpRequestOptions<any>) => {
+  #getRequest = (options: my.IHttpRequestOptions<any>) => {
     const _trackingRequest = this.trackingRequest;
     let response: any,
       resHeaders: Record<string, string>,
@@ -115,8 +115,8 @@ class Logger {
     });
   };
 
-  debug = this.getDebug();
-  request = this.getRequest;
+  debug = this.#getDebug();
+  request = this.#getRequest;
 
   init({
     isOverwriteLog,
@@ -127,9 +127,9 @@ class Logger {
     isOverwriteLog?: boolean;
     isApplyConsoleLog?: boolean;
     isOverwriteRequest?: boolean;
-    config: LoggerConfig;
+    config?: LoggerConfig;
   }) {
-    this.setConfig({
+    this.#setConfig({
       ...config,
       isApplyConsoleLog: isApplyConsoleLog || false,
     });
@@ -142,7 +142,7 @@ class Logger {
     }
   }
 
-  setConfig({
+  #setConfig({
     whitelist,
     isSendToSlack,
     slackUrl,
@@ -156,7 +156,7 @@ class Logger {
     if (isApplyConsoleLog) this.isApplyConsoleLog = isApplyConsoleLog;
   }
 
-  getConfig() {
+  #getConfig() {
     const { appName, isSendToSlack, slackUrl, trackingLog, isApplyConsoleLog } = this;
     return { appName, isSendToSlack, slackUrl, trackingLog, isApplyConsoleLog };
   }

@@ -1,0 +1,69 @@
+<template name="headers_section">
+  <view tiki:for="{{headers}}" class="break-all px-medium py-2x-small border-top border-solid border-gray20">
+    <view tiki:if="{{!token[index] || !token[index].isDecode}}">
+      <text class="text-gray60 font-medium mr-4x-small">{{index}}: </text>{{item}}
+    </view>
+    <text tiki:else>
+      <text class="text-gray60 font-medium mr-4x-small">{{index}}: </text>
+      <view class="nodes">{{token[index].decode}}</view>
+    </text>
+    <view tiki:if="{{index.includes('token')}}" class="mt-2x-small flex gap-4x-small">
+      <button tiki:if="{{!token[index].isDecode}}" onTap="onCopy" data-text="{{item}}" size="small">
+        Copy token
+      </button>
+      <button tiki:else onTap="onCopy" data-text="{{token[index].decode}}" size="small">
+        Copy decode
+      </button>
+      <button onTap="onTransformData" data-field="{{index}}" type="outline" data-type="{{type}}" size="small">
+        {{token[index].isDecode ? 'Encode' : 'Decode'}}
+      </button>
+    </view>
+  </view>
+</template>
+
+<bottom-sheet title="Request Information" show="{{show}}" onClose="onClose" zIndex="{{zIndex}}">
+  <view class="text-small" class="request__bottom-sheet">
+    <view tiki:if="{{request.general}}">
+      <view class="request__title">General</view>
+      <view tiki:for="{{request.general}}"
+        class="break-all px-medium py-2x-small border-top border-solid border-gray20">
+        <text class="text-gray60 font-medium mr-4x-small">{{index}}:</text> {{item}}
+      </view>
+    </view>
+    <view tiki:if="{{request.resHeaders}}">
+      <view class="request__title">Response Headers</view>
+      <template is="headers_section"
+        data="{{...{ headers: request.resHeaders, type: 'resHeaders', token: tokens.resHeaders, onCopy, onEncode, onDecode }}}" />
+    </view>
+    <view tiki:if="{{request.headers}}">
+      <view class="request__title">Headers</view>
+      <template is="headers_section"
+        data="{{...{ headers: request.headers, type: 'headers', token: tokens.headers, onCopy, onEncode, onDecode }}}" />
+    </view>
+    <view tiki:if="{{request.data}}">
+      <view class="request__title flex items-center justify-between">
+        Body
+        <button onTap="onCopy" data-item="{{request.data}}" size="small">
+          Copy body
+        </button>
+      </view>
+      <view tiki:for="{{request.data}}" class="break-all px-medium py-2x-small border-top border-solid border-gray20">
+        <text class="text-gray60 font-medium mr-4x-small">{{index}}:</text> {{item}}
+      </view>
+    </view>
+    <view tiki:if="{{request.response}}">
+      <view class="request__title">Response</view>
+      <view class="nodes px-medium py-small">
+        {{request.response}}
+      </view>
+    </view>
+  </view>
+  <view slot="footer" class="request__footer-btn">
+    <button class="w-full mx-4x-small" onTap="onCopy" data-text="{{request.response}}">
+      Copy Response
+    </button>
+    <button class="w-full mx-4x-small" type="outline" onTap="onCopyCURL">
+      Copy cURL
+    </button>
+  </view>
+</bottom-sheet>

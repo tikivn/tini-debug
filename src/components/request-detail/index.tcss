@@ -1,0 +1,16 @@
+.request__bottom-sheet {
+  min-height: 400px;
+}
+
+.request__title {
+  padding: 12px 16px 2px;
+  background: var(--gray20);
+  color: var(--gray60);
+  font-size: 14px;
+}
+
+.request__footer-btn {
+  display: flex;
+  border-top: 1px solid var(--gray20);
+  padding: 8px 12px calc(8px + var(--safe-area-inset-bottom));
+}

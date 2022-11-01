@@ -1,6 +1,8 @@
 const gulp = require('gulp');
 const path = require('path');
 const babel = require('gulp-babel');
+const ts = require('gulp-typescript');
+const tsProject = ts.createProject('tsconfig.json');
 
 const src = path.join(__dirname, 'src');
 const dist = path.join(__dirname, 'lib');
@@ -9,7 +11,7 @@ const extTypes = ['ts', 'json', 'txml', 'sjs', 'tcss'];
 gulp.task('ts', () =>
   gulp
     .src('src/**/*.ts')
-    .pipe(babel())
+    .pipe(tsProject())
     .on('error', (err) => {
       console.log(err);
     })
