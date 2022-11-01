@@ -28,7 +28,7 @@ logger.init(config);
 
 config:
 
-```json
+```bash
 {
   "isOverwriteLog": "true", // Ghi đè my.debug.log(), my.debug.warn(), my.debug.error()
   "isOverwriteRequest": "true", // Ghi đè my.request()
@@ -60,8 +60,8 @@ Then you can use it as normal component:
 
 Props của component bao gồm:
 
-| Thuộc tính | Kiểu dữ liệu | Giá trị mặc định | Mô tả  |
-| ------------- | ------------- |
+| Thuộc tính  | Kiểu dữ liệu  | Giá trị mặc định | Mô tả  |
+| ------------- | ------------- | ------------- | ------------- |
 | env | 'prod', 'dev' | 'dev' | Nếu env = 'prod sẽ kiểm tra whitelist đã được config từ trước |
 | type | 'default', 'circle', 'shake' | 'default' | Kiểu hiển thị component, mặc định không hiển thị |
 | zIndex | number | 2 | |
