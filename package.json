@@ -11,7 +11,7 @@
     "build": "yarn clean && node compiler.js",
     "clean": "rm -rf lib",
     "publish:minor": "npm version minor && npm publish",
-    "publish": "npm version patch && npm publish"
+    "publish:patch": "npm version patch && npm publish"
   },
   "repository": {
     "type": "git",
