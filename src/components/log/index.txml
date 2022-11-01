@@ -1,0 +1,72 @@
+<import-sjs from="./index.sjs" name="{dateTimeFormat}" />
+
+<template name="log_info">
+  <view class="log-item log-item--info">
+    <icon type="info" size="{{20}}" />
+    <view class="px-2x-small w-full">
+      <view class="mb-5x-small truncate">{{message}}</view>
+      <view class="text-gray60 text-small">{{dateTimeFormat(time, 'dd/mm/yyyy hs:ms:ss')}}</view>
+    </view>
+  </view>
+</template>
+
+<template name="log_warn">
+  <view class="log-item log-item--warn">
+    <icon type="warning_glyph" color="#FDD835" size="{{20}}" />
+    <view class="px-2x-small w-full">
+      <view class="mb-5x-small truncate">{{message}}</view>
+      <view class="text-gray60 text-small">{{dateTimeFormat(time, 'dd/mm/yyyy hs:ms:ss')}}</view>
+    </view>
+  </view>
+</template>
+
+<template name="log_error">
+  <view class="log-item log-item--error">
+    <icon type="close_glyph" color="#D50000" size="{{20}}" />
+    <view class="px-2x-small w-full">
+      <view class="mb-5x-small truncate">{{message}}</view>
+      <view class="text-gray60 text-small">{{dateTimeFormat(time, 'dd/mm/yyyy hs:ms:ss')}}</view>
+    </view>
+  </view>
+</template>
+
+<template name="request_error">
+  <view class="request__list-item request__list-item--fail">
+    <list-item arrow padding upperSubtitle="{{requestInfo.subTitle}}" class="{{className}}">
+      <view class="request__name">{{requestInfo.title}}</view>
+      <view slot="additionContent" class="text-small text-gray60">
+        <text class="mr-small">{{dateTimeFormat(time, 'hs:ms:ss')}}</text>
+        <text class="mr-small font-bold">{{general.method}}</text>
+        <text class="text-red font-bold">Status: {{resHeaders['http-status-code']}}</text>
+      </view>
+      <view slot="prefix">
+        <icon type="close_glyph" size="24" color="#E53935" />
+      </view>
+    </list-item>
+  </view>
+</template>
+
+<template name="request_success">
+  <view class="request__list-item request__list-item--success">
+    <list-item arrow padding upperSubtitle="{{requestInfo.subTitle}}" class="{{className}}">
+      <view class="request__name">{{requestInfo.title}}</view>
+      <view slot="additionContent" class="text-small text-gray60">
+        <text class="mr-small">{{dateTimeFormat(time, 'hs:ms:ss')}}</text>
+        <text class="mr-small font-bold">{{general.method}}</text>
+        <text class="text-success font-bold">Status: {{resHeaders['http-status-code']}}</text>
+      </view>
+      <view slot="prefix">
+        <icon type="success_glyph" size="24" color="#43A047" />
+      </view>
+    </list-item>
+  </view>
+</template>
+
+<view onTap="onTab" tiki:if="{{log}}">
+  <template is="log_{{log.type}}" data={{...log}} />
+</view>
+
+<view onTap="onTab" tiki:if="{{request}}">
+  <template is="{{request.resHeaders['http-status-code'] >= 400 ? 'request_error' : 'request_success'}}"
+    data={{...request}} />
+</view>

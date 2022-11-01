@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "outDir": "./lib",
+    "module": "es2020",
+    "declaration": true, 
+    "strict": true,
+    "types": ["@tiki.vn/tini-types", "node"]
+  }
+}

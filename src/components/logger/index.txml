@@ -1,0 +1,87 @@
+<import-sjs from="./index.sjs" name="{TAB_DEBUG, TYPE_VIEW, dateTimeFormat}" />
+
+<view tiki:if="{{isShow}}" class="logger">
+  <view tiki:if="{{!isShowLog && !isShowLogBottomSheet && !isShowRequestBottomSheet && type === TYPE_VIEW.CIRCLE}}"
+    class="logger__container__icon" onTap="onOpenBottomSheet">
+    <view class="logger__content__icon"></view>
+  </view>
+
+  <bottom-sheet tiki:if="{{isShowLog}}" title="Debug Tool" onClose="onCloseBottomSheet" zIndex="{{zIndex}}">
+    <view slot="header" class="py-small border-bottom border-gray20 border-solid relative">
+      <view class="text-medium font-bold text-center">Debug Tool</view>
+      <view tiki:if="{{tab !== TAB_DEBUG.SETTING}}" onTap="onChangeTap" data-tab="{{TAB_DEBUG.SETTING}}"
+        class="logger__setting logger__setting--right">
+        <icon type="setting" size="{{24}}" />
+      </view>
+      <view tiki:else class="logger__setting logger__setting--left" onTap="onChangeTap"
+        data-tab="{{TAB_DEBUG.CONSOLE}}">
+        <icon type="arrow_left" size="{{24}}" />
+      </view>
+    </view>
+    <view tiki:if="{{tab === TAB_DEBUG.SETTING}}" class="logger__bottom-sheet">
+      <list-item tiki:for="{{settingOptions}}" upperSubtitle="{{item.values[item.activeValue].title}}" padding>
+        <view>{{item.title}}</view>
+        <view slot="prefix">
+          <icon type="{{item.icon}}" size="24" color="#808089" />
+        </view>
+        <view slot="suffix">
+          <switch checked="{{item.activeValue === 'on'}}" onChange="onChangeSetting" data-index="{{index}}" />
+        </view>
+      </list-item>
+    </view>
+    <view tiki:else class="logger__bottom-sheet">
+      <view class="logger__bottom-sheet__header">
+        <view class="mt-small mx-medium flex items-center border radius-8px border-gray20 border-solid">
+          <icon id="search_icon" type="search" size="{{24}}" color="#808089" class="pl-2x-small" />
+          <input onInput="onInput" placeholder="Filter" class="w-full border-0" value="{{search}}"
+            controlled="{{false}}" />
+        </view>
+        <view class="logger__bar">
+          <view class="logger__btn {{tab === TAB_DEBUG.CONSOLE ? 'logger__btn--active' : ''}}" onTap="onChangeTap"
+            data-tab="{{TAB_DEBUG.CONSOLE}}">
+            Console
+          </view>
+          <view class="logger__btn {{tab === TAB_DEBUG.NETWORK ? 'logger__btn--active' : ''}}" onTap="onChangeTap"
+            data-tab="{{TAB_DEBUG.NETWORK}}">
+            Network
+          </view>
+        </view>
+        <view tiki:if="{{tab === TAB_DEBUG.CONSOLE}}" class="mt-medium my-2x-small px-medium font-bold">{{logList.length}} logs</view>
+        <view tiki:else class="py-2x-small px-medium logger__filter">
+          <view class="font-bold nowrap">{{logList.length}} requests</view>
+          <view class="flex items-center py-4x-small px-4x-small bg-gray20 radius-8px gap-4x-small">
+            <view tiki:for="{{networkFilter}}" tiki:for-item="filter" onTap="onChangeFilter" data-type="{{filter.key}}"
+              class="logger__filter-item {{activeFilter === filter.key ? 'logger__filter-item--' + filter.key : ''}} ">
+              <view>
+                {{filter.title}}:
+              </view>
+              <view>
+                {{filter.logs.length}}
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view tiki:if="{{tab === TAB_DEBUG.CONSOLE}}" style="padding-top: 148px;">
+        <log-item tiki:for="{{logList}}" log="{{item}}" onOpenBottomSheet="onOpenDetail" />
+      </view>
+      <view tiki:else style="padding-top: 170px;">
+        <log-item tiki:for="{{logList}}" request="{{item}}" onOpenBottomSheet="onOpenDetail" />
+      </view>
+    </view>
+    <view slot="footer" class="logger__footer__btn">
+      <button class="w-full mx-4x-small" onTap="onCloseBottomSheet">Close</button>
+      <button class="w-full mx-4x-small" type="outline" onTap="onClearLog">Clear</button>
+    </view>
+  </bottom-sheet>
+</view>
+
+<request-detail show="{{isShowRequestBottomSheet}}" request="{{activeRequest}}" zIndex="{{zIndex}}"
+  onClose="onCloseLogDetail" />
+
+<bottom-sheet show="{{isShowLogBottomSheet}}" title="Log Details" onClose="onCloseLogDetail" buttonTitle="Copy Log"
+  onClick="onCopy" data-text="{{activeLog.detail}}" zIndex="{{zIndex}}">
+  <view class="nodes px-medium py-small text-small" class="log__bottom-sheet">
+    {{activeLog.detail}}
+  </view>
+</bottom-sheet>

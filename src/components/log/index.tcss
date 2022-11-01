@@ -1,0 +1,39 @@
+.log-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+}
+
+.log-item--info {
+  background: var(--gray10);
+  border-top: 1px solid var(--gray20);
+}
+
+.log-item--warn {
+  background: var(--color-global-yellow20);
+  border-top: 1px solid var(--color-global-yellow30);
+}
+
+.log-item--error {
+  background: var(--color-global-red20);
+  border-top: 1px solid var(--color-global-red30);
+}
+
+.log__bottom-sheet {
+  min-height: 350px;
+}
+
+.request__list-item--fail {
+  background: #fce4ec;
+}
+
+.request__list-item .tu-list-item {
+  background-color: transparent;
+}
+
+.request__name {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

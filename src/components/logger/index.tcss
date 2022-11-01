@@ -1,0 +1,140 @@
+.logger__container__icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background: var(--gray80);
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 999999;
+}
+
+.logger__content__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: var(--gray70);
+}
+
+.logger__container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--gray80);
+  opacity: 0.9;
+  z-index: 999999;
+  padding: 0 16px;
+  animation: faded ease-in-out 0.2s;
+}
+
+.logger__bar {
+  margin: 12px 16px;
+  background: var(--gray20);
+  padding: 4px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.logger__btn {
+  flex: 1;
+  text-align: center;
+  padding: 4px 0;
+  border-radius: 4px;
+}
+
+.logger__btn--active {
+  background: var(--white);
+}
+
+.nodes {
+  white-space: pre-wrap;
+}
+
+.logger__bts {
+  z-index: 99;
+}
+
+.logger__setting {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-self: center;
+}
+
+.logger__setting--right {
+  right: 14px;
+}
+
+.logger__setting--left {
+  left: 14px;
+}
+
+.logger__footer__btn {
+  display: flex;
+  border-top: 1px solid var(--gray20);
+  padding: 8px 12px calc(8px + var(--safe-area-inset-bottom));
+}
+
+.logger__bottom-sheet {
+  min-height: 400px;
+}
+
+.logger__filter-item {
+  padding: 4px 8px;
+  min-width: 70px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 4px;
+  background: var(--gray40);
+  border: 1px solid var(--gray30);
+}
+
+.logger__filter-item--all {
+  border-radius: 4px;
+  background: var(--white);
+  font-weight: 500;
+  border: 1px solid var(--gray30);
+}
+
+.logger__filter-item--success {
+  border-radius: 4px;
+  background: var(--success);
+  color: white;
+  font-weight: 500;
+  border: 1px solid var(--color-global-green70);
+}
+
+.logger__filter-item--error {
+  border-radius: 4px;
+  background: var(--red);
+  color: white;
+  font-weight: 500;
+  border: 1px solid var(--color-global-red70);
+}
+
+.logger__bottom-sheet__header {
+  position: fixed;
+  width: 100%;
+  background: var(--white);
+}
+
+.logger__filter {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  overflow: auto;
+  border-bottom: 1px solid var(--gray20);
+}
+
+.logger__filter::-webkit-scrollbar {
+  display: none;
+}

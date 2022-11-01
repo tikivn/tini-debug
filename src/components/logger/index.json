@@ -1,0 +1,11 @@
+{
+  "component": true,
+  "usingComponents": {
+    "bottom-sheet": "@tiki.vn/tini-ui/es/bottom-sheet/index",
+    "list-item": "@tiki.vn/tini-ui/es/list/list-item/index",
+    "modal": "@tiki.vn/tini-ui/es/modal/index",
+    "button": "@tiki.vn/tini-ui/es/tu-button/index",
+    "request-detail": "../request-detail/index",
+    "log-item": "../log/index"
+  }
+}
