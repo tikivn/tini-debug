@@ -37,4 +37,4 @@ jobs:
       - name: Push tag
         run: git push && git push --tag
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
