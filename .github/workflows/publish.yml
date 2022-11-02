@@ -34,10 +34,7 @@ jobs:
       - name: Publish
         run: yarn publish:patch
 
-      - name: Commit files
+      - name: Push changes
         run: git push && git push --tag
-      
-      - name: Commit & Push changes
-      uses: actions-js/push@master
-      with:
-        github_token: ${{ secrets.GH_PAT }}
+        with:
+          github_token: ${{ secrets.GH_PAT }}
