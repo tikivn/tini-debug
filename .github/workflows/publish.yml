@@ -34,7 +34,5 @@ jobs:
       - name: Publish
         run: yarn publish:patch
 
-      - name: Push changes
+      - name: Push tag
         run: git push && git push --tag
-        with:
-          github_token: ${{ secrets.GH_PAT }}
