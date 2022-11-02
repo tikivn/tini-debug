@@ -1,6 +1,6 @@
 {
   "name": "@tiki.vn/tini-debug",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Debug tool for TiniApp",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -11,7 +11,7 @@
     "build": "yarn clean && node compiler.js",
     "clean": "rm -rf lib",
     "publish:minor": "npm version minor && npm publish",
-    "publish:patch": "npm version patch --no-git-tag-version && npm publish"
+    "publish:patch": "npm version patch && npm publish"
   },
   "repository": {
     "type": "git",
