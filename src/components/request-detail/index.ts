@@ -34,7 +34,23 @@ Component<RequestProps, RequestData, RequestMethods>({
     },
     onCopy(event) {
       const { text } = event.target.dataset;
-      my.setClipboard({ text });
+      my.setClipboard({
+        text,
+        success: () => {
+          my.showToast({
+            type: 'success',
+            content: 'Copy success 👀',
+            duration: 1200,
+          });
+        },
+        fail: () => {
+          my.showToast({
+            type: 'fail',
+            content: 'Copy fail 🐧',
+            duration: 1200,
+          });
+        },
+      });
     },
     onTransformData(event) {
       const { tokens } = this.data;
@@ -62,7 +78,24 @@ Component<RequestProps, RequestData, RequestMethods>({
         general.url
       }' \\\n${cUrlHeader.join(' \\\n')}${body ? ` \\\n--data-raw '${JSON.stringify(body)}'` : ''}
       `;
-      my.setClipboard({ text: cUrl });
+
+      my.setClipboard({
+        text: cUrl,
+        success: () => {
+          my.showToast({
+            type: 'success',
+            content: 'Copy success 👀',
+            duration: 1200,
+          });
+        },
+        fail: () => {
+          my.showToast({
+            type: 'fail',
+            content: 'Copy fail 🐧',
+            duration: 1200,
+          });
+        },
+      });
     },
   },
 });
