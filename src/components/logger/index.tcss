@@ -120,6 +120,22 @@
   border: 1px solid var(--color-global-red70);
 }
 
+.logger__filter-item--info {
+  border-radius: 4px;
+  background: var(--gray90);
+  color: var(--white);
+  font-weight: 500;
+  border: 1px solid var(--gray30);
+}
+
+.logger__filter-item--warn {
+  border-radius: 4px;
+  background: var(--yellow);
+  color: white;
+  font-weight: 500;
+  border: 1px solid var(--color-global-yellow70);
+}
+
 .logger__bottom-sheet__header {
   position: fixed;
   width: 100%;
@@ -129,8 +145,8 @@
 .logger__filter {
   display: flex;
   align-items: flex-end;
+  gap: 5px;
   justify-content: space-between;
-  gap: 20px;
   overflow: auto;
   border-bottom: 1px solid var(--gray20);
 }

@@ -46,12 +46,10 @@
             Network
           </view>
         </view>
-        <view tiki:if="{{tab === TAB_DEBUG.CONSOLE}}" class="mt-medium my-2x-small px-medium font-bold">{{logList.length}} logs</view>
-        <view tiki:else class="py-2x-small px-medium logger__filter">
-          <view class="font-bold nowrap">{{logList.length}} requests</view>
+        <view class="py-2x-small px-medium logger__filter">
           <view class="flex items-center py-4x-small px-4x-small bg-gray20 radius-8px gap-4x-small">
-            <view tiki:for="{{networkFilter}}" tiki:for-item="filter" onTap="onChangeFilter" data-type="{{filter.key}}"
-              class="logger__filter-item {{activeFilter === filter.key ? 'logger__filter-item--' + filter.key : ''}} ">
+            <view tiki:for="{{tabFilter}}" tiki:for-item="filter" onTap="onChangeFilter" data-type="{{filter.key}}"
+              class="logger__filter-item {{activeFilter == filter.key ? 'logger__filter-item--' + filter.key : ''}} ">
               <view>
                 {{filter.title}}:
               </view>
@@ -60,9 +58,21 @@
               </view>
             </view>
           </view>
+          <view class="flex items-center py-4x-small px-4x-small bg-gray20 radius-8px gap-4x-small">
+            <view class="flex items-center py-4x-small px-2x-small radius-4px {{sortType == 'desc' ? 'bg-white' : ''}}"
+              onTap="onSort" data-type="desc">
+              <image src="https://salt.tikicdn.com/ts/tiniapp/a9/a5/37/c46e634f93b77a0dcf9fcef6ba2ede15.png"
+                style="width: 24px; height: 24px;" />
+            </view>
+            <view class="flex items-center p-4x-small px-2x-small radius-4px {{sortType == 'asc' ? 'bg-white' : ''}}"
+              onTap="onSort" data-type="asc">
+              <image src="https://salt.tikicdn.com/ts/tiniapp/a9/a5/37/c46e634f93b77a0dcf9fcef6ba2ede15.png" style="width: 24px; height: 24px; transform: rotateZ(
+                180deg);" />
+            </view>
+          </view>
         </view>
       </view>
-      <view tiki:if="{{tab === TAB_DEBUG.CONSOLE}}" style="padding-top: 148px;">
+      <view tiki:if="{{tab === TAB_DEBUG.CONSOLE}}" style="padding-top: 170px;">
         <log-item tiki:for="{{logList}}" log="{{item}}" onOpenBottomSheet="onOpenDetail" />
       </view>
       <view tiki:else style="padding-top: 170px;">

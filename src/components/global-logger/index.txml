@@ -1,1 +1,1 @@
-<logger env="{{env}}" type="{{type}}" userEmail="{{email}}" zIndex="{{zIndex}}" />
+<logger env="{{env}}" type="{{type}}" userEmail="{{email}}" zIndex="{{zIndex || 99}}" />
