@@ -10,8 +10,9 @@
   "scripts": {
     "build": "yarn clean && node compiler.js",
     "clean": "rm -rf lib",
-    "publish:minor": "npm version minor && npm publish",
-    "publish:patch": "npm version patch --no-git-tag-version && npm publish"
+    "publish:minor": "npm version minor",
+    "publish:patch": "npm version patch",
+    "publish": "npm publish"
   },
   "repository": {
     "type": "git",

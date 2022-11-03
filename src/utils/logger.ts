@@ -1,6 +1,6 @@
 import { sendMessageLogToSlack } from './notify';
 
-const LEVEL_DEBUG = {
+export const LEVEL_DEBUG = {
   INFO: 'info',
   WARN: 'warn',
   ERROR: 'error',
@@ -40,6 +40,9 @@ export type Request = {
 
 export const request: any = my.request;
 class Logger {
+  setConfig(configOptions: any) {
+    throw new Error('Method not implemented.');
+  }
   isSendToSlack: boolean = false;
   isApplyConsoleLog: boolean = false;
   slackUrl: string = '';

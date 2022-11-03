@@ -1,4 +1,4 @@
-import logger, { Log, Request } from '../../utils/logger';
+import logger, { Log, Request, LEVEL_DEBUG } from '../../utils/logger';
 import { checkEmailInWhiteList } from '../../utils/verify';
 
 const ENV = {
@@ -13,11 +13,18 @@ const TAB_DEBUG = {
   SETTING: 'setting',
 };
 
-const FILTER_TYPE = [
-  { key: 'all', title: 'All', logs: [] },
-  { key: 'success', title: 'Success', logs: [] },
-  { key: 'error', title: 'Error', logs: [] },
-];
+const FILTER_TYPE = {
+  [TAB_DEBUG.NETWORK]: [
+    { key: 'all', title: 'All', logs: [] },
+    { key: 'success', title: 'Success', logs: [] },
+    { key: 'error', title: 'Error', logs: [] },
+  ],
+  [TAB_DEBUG.CONSOLE]: [
+    { key: 'info', title: 'Log', logs: [] },
+    { key: 'warn', title: 'Warn', logs: [] },
+    { key: 'error', title: 'Error', logs: [] },
+  ],
+};
 
 const tracking = {
   [TAB_DEBUG.CONSOLE]: logger.trackingLog,
@@ -91,7 +98,7 @@ const SETTING_OPTIONS: SettingOption[] = [
   },
 ];
 
-type NetworkFilter = { key: string; title: string; logs: Request[] };
+type tabFilter = { key: string; title: string; logs: Log[] | Request[] };
 
 type LoggerData = {
   tab: string;
@@ -102,10 +109,11 @@ type LoggerData = {
   search: string;
   activeLog: Log | null;
   activeRequest: Request | null;
-  networkFilter: NetworkFilter[];
+  tabFilter: tabFilter[];
   isShow: boolean;
   activeFilter: string;
   settingOptions: SettingOption[];
+  sortType: 'asc' | 'desc';
 };
 
 type LoggerMethods = {
@@ -121,7 +129,8 @@ type LoggerMethods = {
   onOpenDetail: ({ log, request }: { log: Log; request: Request }) => void;
   onCloseLogDetail: (event: any) => void;
   onCopy: (event: any) => void;
-  updateNetworkFilter: () => void;
+  updateLogList: () => void;
+  onSort: (event: any) => void;
 };
 
 Component<LoggerProps, LoggerData, LoggerMethods>({
@@ -137,31 +146,21 @@ Component<LoggerProps, LoggerData, LoggerMethods>({
     search: '',
     logList: [],
     activeRequest: null,
-    networkFilter: FILTER_TYPE,
+    tabFilter: FILTER_TYPE[TAB_DEBUG.CONSOLE],
     activeLog: null,
     isShow: false,
-    activeFilter: FILTER_TYPE[0].key,
+    activeFilter: FILTER_TYPE[TAB_DEBUG.CONSOLE][0].key,
     settingOptions: SETTING_OPTIONS,
+    sortType: 'desc',
   },
   async onInit() {
     this.onInput = (event) => {
       clearTimeout(this.timerId);
       const { value: search } = event.detail;
       this.timerId = setTimeout(() => {
-        const { tab } = this.data;
-        let logList: any[] = tracking[tab];
-        if (search) {
-          if (tab === TAB_DEBUG.CONSOLE) {
-            logList = logList.filter((log: Log) => {
-              return log.message.includes(search);
-            });
-          } else {
-            logList = logList.filter((log: Request) => {
-              return log.general.url.includes(search);
-            });
-          }
-        }
-        this.setData({ logList, search });
+        this.setData({ search }, () => {
+          this.updateLogList();
+        });
       }, 300);
     };
   },
@@ -175,24 +174,61 @@ Component<LoggerProps, LoggerData, LoggerMethods>({
     if (type !== this.props.type) this.updateSetting({ type });
   },
   methods: {
-    updateNetworkFilter() {
-      const _filters = (tracking[TAB_DEBUG.NETWORK] as Request[]).reduce(
-        (_filters: [Request[], Request[], Request[]], request: Request) => {
-          const error: boolean =
-            (request.resHeaders && request.resHeaders['http-status-code'] >= 400) || false;
-          if (!error) _filters[1].push(request);
-          else _filters[2].push(request);
-          _filters[0].push(request);
-          return _filters;
-        },
-        [[], [], []],
-      );
+    updateLogList() {
+      const { activeFilter, sortType, tab, search } = this.data;
+      let { logList, tabFilter } = this.data;
+      if (tab === TAB_DEBUG.NETWORK) {
+        // filter network
+        const _filters = (tracking[TAB_DEBUG.NETWORK] as Request[]).reduce(
+          (_filters: [Request[], Request[], Request[]], request: Request) => {
+            const error: boolean =
+              (request.resHeaders && request.resHeaders['http-status-code'] >= 400) || false;
+            if (!error) _filters[1].push(request);
+            else _filters[2].push(request);
+            _filters[0].push(request);
+            return _filters;
+          },
+          [[], [], []],
+        );
 
-      const networkFilter = FILTER_TYPE.map((filter: NetworkFilter, index) => {
-        filter.logs = _filters[index];
-        return filter;
-      });
-      this.setData({ networkFilter, activeFilter: FILTER_TYPE[0].key });
+        tabFilter = FILTER_TYPE[TAB_DEBUG.NETWORK].map((filter: tabFilter, index) => {
+          filter.logs = _filters[index];
+          if (activeFilter === filter.key) logList = filter.logs;
+          return filter;
+        });
+      } else {
+        const _filters = (tracking[TAB_DEBUG.CONSOLE] as Log[]).reduce(
+          (_filters: [Log[], Log[], Log[]], log: Log) => {
+            if (log.type === LEVEL_DEBUG.INFO) _filters[0].push(log);
+            else if (log.type === LEVEL_DEBUG.WARN) _filters[1].push(log);
+            else _filters[2].push(log);
+            return _filters;
+          },
+          [[], [], []],
+        );
+
+        tabFilter = FILTER_TYPE[TAB_DEBUG.CONSOLE].map((filter: tabFilter, index) => {
+          filter.logs = _filters[index];
+          if (activeFilter === filter.key) logList = filter.logs;
+          return filter;
+        });
+      }
+      // sort
+      logList = sortType == 'asc' ? logList : logList.reverse();
+      // search
+      if (search) {
+        if (tab === TAB_DEBUG.CONSOLE) {
+          logList = (logList as Log[]).filter((log: Log) => {
+            return log.message.includes(search);
+          });
+        } else {
+          logList = (logList as Request[]).filter((log: Request) => {
+            return log.general.url.includes(search);
+          });
+        }
+      }
+
+      this.setData({ tabFilter, logList });
     },
     onOpenBottomSheet() {
       let { tab } = this.data;
@@ -201,12 +237,8 @@ Component<LoggerProps, LoggerData, LoggerMethods>({
         return;
       }
 
-      if (tab === TAB_DEBUG.NETWORK) this.updateNetworkFilter();
-
-      this.setData({
-        logList: tracking[this.data.tab],
-        isShowLog: true,
-        search: '',
+      this.setData({ isShowLog: true, search: '' }, () => {
+        this.updateLogList();
       });
     },
     onCloseBottomSheet() {
@@ -222,8 +254,10 @@ Component<LoggerProps, LoggerData, LoggerMethods>({
         this.setData({ tab });
         return;
       }
-      if (tab === TAB_DEBUG.NETWORK) this.updateNetworkFilter();
-      this.setData({ tab, logList: tracking[tab], search: '' });
+
+      this.setData({ tab, search: '', activeFilter: FILTER_TYPE[tab][0].key }, () => {
+        this.updateLogList();
+      });
     },
     onChangeSetting(event) {
       const active = event.detail.value ? 'on' : 'off';
@@ -275,11 +309,8 @@ Component<LoggerProps, LoggerData, LoggerMethods>({
     },
     onChangeFilter(event) {
       const { type } = event.target.dataset;
-      const { networkFilter } = this.data;
-      const newIndex = networkFilter.findIndex((filter) => filter.key === type);
-      this.setData({
-        logList: networkFilter[newIndex].logs,
-        activeFilter: type,
+      this.setData({ activeFilter: type }, () => {
+        this.updateLogList();
       });
     },
     onOpenDetail({ log, request }) {
@@ -299,7 +330,29 @@ Component<LoggerProps, LoggerData, LoggerMethods>({
       this.onOpenBottomSheet();
     },
     onCopy(event) {
-      my.setClipboard({ text: event.target.dataset.text });
+      my.setClipboard({
+        text: event.target.dataset.text,
+        success: () => {
+          my.showToast({
+            type: 'success',
+            content: 'Copy success 👀',
+            duration: 1200,
+          });
+        },
+        fail: () => {
+          my.showToast({
+            type: 'fail',
+            content: 'Copy fail 🐧',
+            duration: 1200,
+          });
+        },
+      });
+    },
+    onSort(event) {
+      const { type } = event.target.dataset;
+      this.setData({ sortType: type }, () => {
+        this.updateLogList();
+      });
     },
   },
 });
