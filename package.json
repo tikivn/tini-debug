@@ -1,6 +1,6 @@
 {
   "name": "@tiki.vn/tini-debug",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Debug tool for TiniApp",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
