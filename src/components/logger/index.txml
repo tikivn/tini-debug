@@ -2,7 +2,8 @@
 
 <view tiki:if="{{isShow}}" class="logger">
   <view tiki:if="{{!isShowLog && !isShowLogBottomSheet && !isShowRequestBottomSheet && type === TYPE_VIEW.CIRCLE}}"
-    class="logger__container__icon" onTap="onOpenBottomSheet">
+    class="logger__container__icon" onTap="onOpenBottomSheet" onTouchMove="onTouchStart" onTouchEnd="onTouchEnd"
+    style="top: {{cursor.y}}px; left: {{cursor.x}}px; {{cursor.touching ? 'opacity: 0.5' : 'opacity: 1'}}">
     <view class="logger__content__icon"></view>
   </view>
 

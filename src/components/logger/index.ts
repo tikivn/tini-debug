@@ -114,6 +114,7 @@ type LoggerData = {
   activeFilter: string;
   settingOptions: SettingOption[];
   sortType: 'asc' | 'desc';
+  cursor: { x: number; y: number; touching: boolean };
 };
 
 type LoggerMethods = {
@@ -131,6 +132,8 @@ type LoggerMethods = {
   onCopy: (event: any) => void;
   updateLogList: () => void;
   onSort: (event: any) => void;
+  onTouchEnd?: (event: any) => void;
+  onTouchStart?: () => void;
 };
 
 Component<LoggerProps, LoggerData, LoggerMethods>({
@@ -152,6 +155,7 @@ Component<LoggerProps, LoggerData, LoggerMethods>({
     activeFilter: FILTER_TYPE[TAB_DEBUG.CONSOLE][0].key,
     settingOptions: SETTING_OPTIONS,
     sortType: 'desc',
+    cursor: { x: 16, y: 16, touching: false },
   },
   async onInit() {
     this.onInput = (event) => {
@@ -162,6 +166,23 @@ Component<LoggerProps, LoggerData, LoggerMethods>({
           this.updateLogList();
         });
       }, 300);
+    };
+
+    this.onTouchEnd = (event) => {
+      if (this.data.cursor.touching) {
+        this.setData({
+          cursor: {
+            x: event.changedTouches[0].pageX,
+            y: event.changedTouches[0].pageY,
+            touching: false,
+          },
+        });
+      }
+    };
+
+    this.onTouchStart = () => {
+      const cursor = this.data.cursor;
+      if (!cursor.touching) this.setData({ cursor: { ...cursor, touching: true } });
     };
   },
   deriveDataFromProps(nextProps) {
