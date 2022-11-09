@@ -40,9 +40,6 @@ export type Request = {
 
 export const request: any = my.request;
 class Logger {
-  setConfig(configOptions: any) {
-    throw new Error('Method not implemented.');
-  }
   isSendToSlack: boolean = false;
   isApplyConsoleLog: boolean = false;
   slackUrl: string = '';
@@ -91,7 +88,11 @@ class Logger {
           data ? ` \\\n--data-raw '${JSON.stringify(data)}'` : ''
         }
       `;
-        (my as any).debug.error(`Fail request API ${url}: ${error}\n${cUrl}`);
+        let msgError = `Fail request API ${url}: ${error}\n`;
+        msgError += resHeaders['x-request-id']
+          ? `x-request-id: ${resHeaders['x-request-id']}\n`
+          : cUrl;
+        (my as any).debug.error(msgError);
         response = error;
       },
       complete(res: any) {

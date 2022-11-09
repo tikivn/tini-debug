@@ -42,6 +42,14 @@ config:
 }
 ```
 
+Use my.debug:
+
+```bash
+my.debug.log("Hello world!");
+my.debug.warn("Hello world!");
+my.debug.error("Hello world!");
+```
+
 Register the component into `.json` config file
 
 ```json
