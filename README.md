@@ -30,12 +30,12 @@ config:
 
 ```bash
 {
-  "isOverwriteLog": "true", // Ghi đè my.debug.log(), my.debug.warn(), my.debug.error()
-  "isOverwriteRequest": "true", // Ghi đè my.request()
-  "isApplyConsoleLog": "true", // Cho phép console.log() khi overwrite lại my.debug
+  "isOverwriteLog": true, // Ghi đè my.debug.log(), my.debug.warn(), my.debug.error()
+  "isOverwriteRequest": true, // Ghi đè my.request()
+  "isApplyConsoleLog": true, // Cho phép console.log() khi overwrite lại my.debug
   "config": { 
     "whitelist": ["*"], // whitelist email ["*"]: tất cả email, ["@tiki.vn"]: email có domain @tiki.vn, ["abc@tiki.vn"]: kiểm tra email
-    "isSendToSlack": "false", // Gửi thông báo qua Slack channel khi dùng log error
+    "isSendToSlack": false, // Gửi thông báo qua Slack channel khi dùng log error
     "slackUrl": SLACK_URL, // Link bot gửi thông báo ở trong channel Slack
     "appName": "APP_NAME", // Tên app 
   },

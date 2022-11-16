@@ -89,9 +89,10 @@ class Logger {
         }
       `;
         let msgError = `Fail request API ${url}: ${error}\n`;
-        msgError += resHeaders['x-request-id']
-          ? `x-request-id: ${resHeaders['x-request-id']}\n`
-          : cUrl;
+        msgError +=
+          resHeaders && resHeaders['x-request-id']
+            ? `x-request-id: ${resHeaders['x-request-id']}\n`
+            : cUrl;
         (my as any).debug.error(msgError);
         response = error;
       },
@@ -133,7 +134,7 @@ class Logger {
     isOverwriteRequest?: boolean;
     config?: LoggerConfig;
   }) {
-    this.#setConfig({
+    this.setConfig({
       ...config,
       isApplyConsoleLog: isApplyConsoleLog || false,
     });
@@ -146,7 +147,7 @@ class Logger {
     }
   }
 
-  #setConfig({
+  setConfig({
     whitelist,
     isSendToSlack,
     slackUrl,
