@@ -74,7 +74,11 @@ class Logger {
     request({
       ...options,
       includeHeader: true,
+      dataType: 'text',
       success: (res: any) => {
+        try {
+          res.data = JSON.parse(res.data);
+        } catch (error) {}
         success && success(res.data);
         response = res.data;
         resHeaders = res.headers.map ? res.headers.map : res.headers;
