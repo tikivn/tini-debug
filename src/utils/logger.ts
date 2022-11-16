@@ -63,6 +63,8 @@ class Logger {
     };
   };
 
+  debug = this.#getDebug();
+
   #getRequest = (options: my.IHttpRequestOptions<any>) => {
     const _trackingRequest = this.trackingRequest;
     let response: any,
@@ -93,7 +95,7 @@ class Logger {
           resHeaders && resHeaders['x-request-id']
             ? `x-request-id: ${resHeaders['x-request-id']}\n`
             : cUrl;
-        (my as any).debug.error(msgError);
+        this.debug.error(msgError);
         response = error;
       },
       complete(res: any) {
@@ -120,7 +122,6 @@ class Logger {
     });
   };
 
-  debug = this.#getDebug();
   request = this.#getRequest;
 
   init({
